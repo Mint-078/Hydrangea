@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="hydrangea.kimono.1.1">#8e182c</color>
+    <color name="hydrangea.kimono.1.2">#b41e4e</color>
+    <color name="hydrangea.kimono.2.1">#db549e</color>
+    <color name="hydrangea.kimono.2.2">#f0d3e0</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

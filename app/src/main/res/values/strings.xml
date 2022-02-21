@@ -1,0 +1,17 @@
+<resources>
+    <string name="appName">Hydrangea</string>
+
+    <string name="labelUrl">Hydrus URL:\u0020%1$s</string>
+    <string name="labelApiVersion">API Version:\u0020%1$s</string>
+    <string name="labelHydrusVersion">Hydrus Version:\u0020%1$s</string>
+
+    <string name="buttonRegister">Register</string>
+
+    <string name="msgContactError">Error Contacting API</string>
+    <string name="msgContactSuccess">Client API contacted successfully</string>
+    <string name="msgRegisterError">Error Registering with Hydrus client API</string>
+    <string name="msgRegisterSuccess">Registration successful</string>
+
+    <string name="responseApiVersion">version</string>
+    <string name="responseHydrusVersion">hydrus_version</string>
+</resources>
