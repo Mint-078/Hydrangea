@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class GalleryAdapter(val bitmaps: MutableList<Pair<String, Bitmap>>, val imageCallback: (id: String) -> Unit) : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        return GalleryViewHolder(from(parent.context).inflate(R.layout.image_layout, parent, false))
+        return GalleryViewHolder(from(parent.context).inflate(R.layout.gallery_image, parent, false))
     }
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {

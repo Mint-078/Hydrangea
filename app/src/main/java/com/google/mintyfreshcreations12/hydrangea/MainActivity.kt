@@ -20,6 +20,7 @@ import org.json.JSONException
 class MainActivity : AppCompatActivity() {
     var baseUrl = ""
     private val imageList : MutableList<Pair<String, Bitmap>> = emptyArray<Pair<String, Bitmap>>().toMutableList()
+    private val idList : MutableList<String> = emptyArray<String>().toMutableList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +38,15 @@ class MainActivity : AppCompatActivity() {
         // Initialize Gallery
         val gallery = findViewById<RecyclerView>(R.id.imageGallery)
         gallery.adapter = GalleryAdapter(imageList) {
-            startActivity(Intent(this, ViewImage::class.java).putExtra(Constants.BNDL_IMAGE_ID, it))
+            startActivity(Intent(this, ViewImage::class.java).putExtra(Constants.BNDL_IMAGE_ID, it)
+                .putExtra(Constants.BNDL_IMAGE_LIST, ArrayList(idList)))
         }
         val manager = StaggeredGridLayoutManager(Constants.PREF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
         manager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         gallery.layoutManager = manager
         hydrus.setThumbnailCallback {
             id, thumbnail ->
+            idList.add(id)
             if (imageList.add(id to thumbnail)) (gallery.adapter as GalleryAdapter).notifyItemInserted(imageList.size - 1)
         }
 

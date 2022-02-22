@@ -6,6 +6,8 @@ object Constants {
     const val PREF_API_KEY = "PREF_API_KEY"
 
     const val BNDL_IMAGE_ID = "IMAGE_ID"
+    const val BNDL_IMAGE_POS = "IMAGE_POS"
+    const val BNDL_IMAGE_LIST = "IMAGE_LIST"
 
     const val API_RESP_API_VER = "version"
     const val API_RESP_HYDRUS_VER = "hydrus_version"
