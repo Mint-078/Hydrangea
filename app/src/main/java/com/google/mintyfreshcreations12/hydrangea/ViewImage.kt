@@ -16,6 +16,5 @@ class ViewImage : FragmentActivity() {
         findViewById<ViewPager2>(R.id.viewPager).adapter = ImageViewerFragmentAdapter(
             this, ids, hydrus)
         findViewById<ViewPager2>(R.id.viewPager).setCurrentItem(ids.indexOf(this.intent.extras?.getString(Constants.BNDL_IMAGE_ID)), false)
-
     }
 }

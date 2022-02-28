@@ -2,13 +2,17 @@ package com.google.mintyfreshcreations12.hydrangea
 
 import android.app.Activity
 import android.graphics.Bitmap
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 //TODO: Move Hydrangea specific logic and callbacks to Hydrus class so that HydrusApi can be a simple wrapper of the client API
 typealias VersionCallback = (apiVersion: String, hydrusVersion: String) -> Unit
@@ -16,6 +20,7 @@ typealias RegistrationCallback = (apiKey: String) -> Unit
 typealias SearchCallback = () -> Unit
 typealias ThumbnailCallback = (id: String, thumbnail: Bitmap) -> Unit
 typealias ImageCallback = (thumbnail: Bitmap) -> Unit
+typealias AddImageCallback = () -> Unit
 class HydrusApi(private val context: Activity, private var baseUrl: String, private var apiKey: String) {
     private val queue = Volley.newRequestQueue(context)
     private var versionCallback: VersionCallback = { _,_-> }
@@ -58,7 +63,7 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
                 batchThumbnailRequest(it.getJSONArray(Constants.API_RESP_FILE_IDS))
             },
             {
-                Toast.makeText(context, "Search Failure", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.msgContactError), Toast.LENGTH_SHORT).show()
             }))
     }
 
@@ -76,5 +81,36 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
             {
                 imageCallback(it)
             }, 0, 0, ImageView.ScaleType.FIT_CENTER, Bitmap.Config.ARGB_8888, null))
+    }
+
+    fun addImage(stream: ByteArrayOutputStream){
+        val request = object: JsonObjectRequest(Request.Method.POST, baseUrl + Constants.API_REQU_ADD_IMAGE.format(apiKey), null,
+            {
+                when(it.getInt(Constants.API_RESP_ADD_STATUS)){
+                    Constants.ADD_STATUS.SUCCESS.code -> Toast.makeText(context, context.getString(R.string.msgAddFileSuccess), Toast.LENGTH_LONG).show()
+                    Constants.ADD_STATUS.DUPLICATE.code -> Toast.makeText(context, context.getString(R.string.msgAddFileDuplicate), Toast.LENGTH_LONG).show()
+                    Constants.ADD_STATUS.RESTORATION.code -> Toast.makeText(context, context.getString(R.string.msgAddFileRestore), Toast.LENGTH_LONG).show()
+                    Constants.ADD_STATUS.FAILURE.code -> Toast.makeText(context, context.getString(R.string.msgAddFileFailure), Toast.LENGTH_LONG).show()
+                    Constants.ADD_STATUS.VETO.code -> Toast.makeText(context, context.getString(R.string.msgAddFileVeto), Toast.LENGTH_LONG).show()
+                }
+            },
+            {
+                Toast.makeText(context, context.getString(R.string.msgContactError), Toast.LENGTH_SHORT).show()
+            }){
+            override fun getBody(): ByteArray {
+                return stream.toByteArray()
+            }
+
+            override fun getBodyContentType(): String {
+                return Constants.API_HEAD_ADD_IMAGE
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val map = emptyMap<String, String>().toMutableMap()
+                map[Constants.API_HEAD_API_KEY] = apiKey
+                return map
+            }
+        }
+        queue.add(request)
     }
 }

@@ -1,9 +1,14 @@
 package com.google.mintyfreshcreations12.hydrangea
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONException
+import java.io.ByteArrayOutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -88,6 +94,28 @@ class MainActivity : AppCompatActivity() {
         // Query the API for file_ids from default collection
         findViewById<Button>(R.id.buttonSearch).setOnClickListener{
             hydrus.search(emptyArray())
+        }
+
+        val forResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if(it.resultCode == Activity.RESULT_OK){
+                val result = it.data
+                if(result != null && result.data != null)
+                {
+                    val source = ImageDecoder.createSource(this.contentResolver, result.data!!)
+                    val bitmap = ImageDecoder.decodeBitmap(source)
+                    val stream = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    hydrus.addImage(stream)
+                }
+
+            }
+        }
+
+        findViewById<Button>(R.id.buttonAdd).setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            forResult.launch(intent)
         }
     }
 }
