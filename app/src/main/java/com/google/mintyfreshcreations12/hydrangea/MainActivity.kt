@@ -1,6 +1,8 @@
 package com.google.mintyfreshcreations12.hydrangea
 
 import android.app.Activity
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -9,8 +11,10 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.android.volley.Request
@@ -34,26 +38,34 @@ class MainActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences(Constants.PREFS, MODE_PRIVATE)
         baseUrl = prefs.getString(Constants.PREF_HYDRUS_BASE_URL, "").toString()
-        val hydrus = HydrusApi(this, prefs.getString(Constants.PREF_HYDRUS_BASE_URL, "").toString(),
-            prefs.getString(Constants.PREF_API_KEY, "").toString())
-        hydrus.setVersionCallback{ apiVersion, hydrusVersion ->
-            findViewById<TextView>(R.id.textApiVersion).text = getString(R.string.labelApiVersion, apiVersion)
-            findViewById<TextView>(R.id.textHydrusVersion).text = getString(R.string.labelHydrusVersion, hydrusVersion)
+        val hydrus = HydrusApi(
+            this, prefs.getString(Constants.PREF_HYDRUS_BASE_URL, "").toString(),
+            prefs.getString(Constants.PREF_API_KEY, "").toString()
+        )
+        hydrus.setVersionCallback { apiVersion, hydrusVersion ->
+            findViewById<TextView>(R.id.textApiVersion).text =
+                getString(R.string.labelApiVersion, apiVersion)
+            findViewById<TextView>(R.id.textHydrusVersion).text =
+                getString(R.string.labelHydrusVersion, hydrusVersion)
         }
 
         // Initialize Gallery
         val gallery = findViewById<RecyclerView>(R.id.imageGallery)
         gallery.adapter = GalleryAdapter(imageList) {
-            startActivity(Intent(this, ViewImage::class.java).putExtra(Constants.BNDL_IMAGE_ID, it)
-                .putExtra(Constants.BNDL_IMAGE_LIST, ArrayList(idList)))
+            startActivity(
+                Intent(this, ViewImage::class.java).putExtra(Constants.BNDL_IMAGE_ID, it)
+                    .putExtra(Constants.BNDL_IMAGE_LIST, ArrayList(idList))
+            )
         }
-        val manager = StaggeredGridLayoutManager(Constants.PREF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
+        val manager =
+            StaggeredGridLayoutManager(Constants.PREF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
         manager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         gallery.layoutManager = manager
-        hydrus.setThumbnailCallback {
-            id, thumbnail ->
+        hydrus.setThumbnailCallback { id, thumbnail ->
             idList.add(id)
-            if (imageList.add(id to thumbnail)) (gallery.adapter as GalleryAdapter).notifyItemInserted(imageList.size - 1)
+            if (imageList.add(id to thumbnail)) (gallery.adapter as GalleryAdapter).notifyItemInserted(
+                imageList.size - 1
+            )
         }
 
         // Prevent draw access through means other than button
@@ -67,16 +79,14 @@ class MainActivity : AppCompatActivity() {
 
         //TODO: Move networking validation code to Hydrus class
         // Check for connectivity to client API
-        if(baseUrl.isNotEmpty())
-        {
+        if (baseUrl.isNotEmpty()) {
             findViewById<EditText>(R.id.editURL).setText(baseUrl)
             hydrus.repeatVersionRequest()
         }
 
         // Update URL and attempt connection
-        findViewById<EditText>(R.id.editURL).setOnFocusChangeListener{ view, hasFocus ->
-            if(!hasFocus)
-            {
+        findViewById<EditText>(R.id.editURL).setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
                 baseUrl = (view as EditText).text.toString()
                 hydrus.repeatVersionRequest()
                 prefs.edit().putString(Constants.PREF_HYDRUS_BASE_URL, baseUrl).apply()
@@ -84,38 +94,67 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Register with client API for access key
-        findViewById<Button>(R.id.buttonRegister).setOnClickListener{
+        findViewById<Button>(R.id.buttonRegister).setOnClickListener {
             hydrus.register {
                 prefs.edit().putString(Constants.PREF_API_KEY, it).apply()
-                Toast.makeText(this, getString(R.string.msgRegisterSuccess), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msgRegisterSuccess), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         // Query the API for file_ids from default collection
-        findViewById<Button>(R.id.buttonSearch).setOnClickListener{
+        findViewById<Button>(R.id.buttonSearch).setOnClickListener {
             hydrus.search(emptyArray())
         }
 
-        val forResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            if(it.resultCode == Activity.RESULT_OK){
-                val result = it.data
-                if(result != null && result.data != null)
-                {
-                    val source = ImageDecoder.createSource(this.contentResolver, result.data!!)
-                    val bitmap = ImageDecoder.decodeBitmap(source)
-                    val stream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                    hydrus.addImage(stream)
-                }
+        val forResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    val result = it.data
+                    if (result != null && result.data != null) {
+                        val source = ImageDecoder.createSource(this.contentResolver, result.data!!)
+                        val bitmap = ImageDecoder.decodeBitmap(source)
+                        val stream = ByteArrayOutputStream()
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        hydrus.addImage(stream)
+                    }
 
+                }
             }
-        }
 
         findViewById<Button>(R.id.buttonAdd).setOnClickListener {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             forResult.launch(intent)
+        }
+
+
+
+
+        class addUrl : DialogFragment() {
+            override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+                return activity?.let {
+                    val builder = AlertDialog.Builder(it)
+                    val view =
+                        requireActivity().layoutInflater.inflate(R.layout.add_url_dialog, null);
+                    builder.setView(view)
+                    builder.setMessage("Add URL")
+                        .setPositiveButton("Confirm",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                hydrus.addImageUrl(view.findViewById<EditText>(R.id.editTextUrl).text.toString())
+                            })
+                        .setNegativeButton("Cancel",
+                            DialogInterface.OnClickListener { dialog, id ->
+                            })
+                    // Create the AlertDialog object and return it
+                    builder.create()
+                } ?: throw IllegalStateException("Activity cannot be null")
+            }
+        }
+        findViewById<Button>(R.id.buttonAddUrl).setOnClickListener {
+            val alert = addUrl()
+            alert.show(supportFragmentManager, "addUrlFragment")
         }
     }
 }

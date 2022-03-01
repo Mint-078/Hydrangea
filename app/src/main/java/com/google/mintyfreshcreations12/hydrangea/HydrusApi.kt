@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.nio.charset.Charset
 
 //TODO: Move Hydrangea specific logic and callbacks to Hydrus class so that HydrusApi can be a simple wrapper of the client API
 typealias VersionCallback = (apiVersion: String, hydrusVersion: String) -> Unit
@@ -84,7 +85,7 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
     }
 
     fun addImage(stream: ByteArrayOutputStream){
-        val request = object: JsonObjectRequest(Request.Method.POST, baseUrl + Constants.API_REQU_ADD_IMAGE.format(apiKey), null,
+        val request = object: JsonObjectRequest(Request.Method.POST, baseUrl + Constants.API_REQU_ADD_IMAGE, null,
             {
                 when(it.getInt(Constants.API_RESP_ADD_STATUS)){
                     Constants.ADD_STATUS.SUCCESS.code -> Toast.makeText(context, context.getString(R.string.msgAddFileSuccess), Toast.LENGTH_LONG).show()
@@ -103,6 +104,34 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
 
             override fun getBodyContentType(): String {
                 return Constants.API_HEAD_ADD_IMAGE
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val map = emptyMap<String, String>().toMutableMap()
+                map[Constants.API_HEAD_API_KEY] = apiKey
+                return map
+            }
+        }
+        queue.add(request)
+    }
+
+    fun addImageUrl(url: String){
+
+        val request = object: JsonObjectRequest(Request.Method.POST, baseUrl + Constants.API_REQU_ADD_URL, null,
+            {
+
+            },
+            {
+                Toast.makeText(context, context.getString(R.string.msgContactError), Toast.LENGTH_SHORT).show()
+            }){
+            override fun getBody(): ByteArray {
+                val obj = JSONObject()
+                obj.put("url", url)
+                return obj.toString().toByteArray(Charsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return Constants.API_HEAD_ADD_URL
             }
 
             override fun getHeaders(): MutableMap<String, String> {

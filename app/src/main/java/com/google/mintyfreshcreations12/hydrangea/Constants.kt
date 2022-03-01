@@ -28,8 +28,10 @@ object Constants {
     const val API_REQU_THUMBNAIL = "/get_files/thumbnail?file_id=%1\$s&Hydrus-Client-API-Access-Key=%2\$s"
     const val API_REQU_IMAGE = "/get_files/file?file_id=%1\$s&Hydrus-Client-API-Access-Key=%2\$s"
     const val API_REQU_ADD_IMAGE = "/add_files/add_file"
+    const val API_REQU_ADD_URL = "/add_urls/add_url"
 
     const val API_HEAD_ADD_IMAGE = "application/octet-stream"
+    const val API_HEAD_ADD_URL = "application/json"
     const val API_HEAD_API_KEY = "Hydrus-Client-API-Access-Key"
 
     const val PREF_COLUMNS = 3
