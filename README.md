@@ -16,5 +16,6 @@ Planned Features (nonexhaustive):
 - View tags
 - Edit tags
 - Make it look pretty
+- Share image/link from other apps
 
 This is a project that I plan to run myself, but I am open to feature requests and comments.

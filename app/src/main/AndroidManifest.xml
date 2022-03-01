@@ -20,10 +20,19 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
+        <!--
+        <activity android:name="MediaShare" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <data android:mimeType="text/plain"/>
+        -->
     </application>
 
 </manifest>
