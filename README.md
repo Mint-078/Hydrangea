@@ -11,6 +11,7 @@ Current Features:
 - View full sized images
 - Upload from file
 - Upload from url
+- Search by tag
 
 Planned Features (nonexhaustive):
 - View tags

@@ -10,5 +10,6 @@
         <item name="colorSecondaryVariant">@color/hydrangea.kimono.2.2</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Customize your theme here. -->
+        <item name="android:colorAccent">@color/hydrangea.kimono.2.1</item>
     </style>
 </resources>

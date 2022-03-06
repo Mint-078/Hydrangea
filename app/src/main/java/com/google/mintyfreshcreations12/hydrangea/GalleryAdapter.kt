@@ -1,10 +1,12 @@
 package com.google.mintyfreshcreations12.hydrangea
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 

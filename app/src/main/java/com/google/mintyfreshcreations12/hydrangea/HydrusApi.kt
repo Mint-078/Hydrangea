@@ -2,18 +2,18 @@ package com.google.mintyfreshcreations12.hydrangea
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.util.Log
+import android.os.Build
+import android.util.DisplayMetrics
 import android.widget.ImageView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
-import java.nio.charset.Charset
+import java.net.URLEncoder
 
 //TODO: Move Hydrangea specific logic and callbacks to Hydrus class so that HydrusApi can be a simple wrapper of the client API
 typealias VersionCallback = (apiVersion: String, hydrusVersion: String) -> Unit
@@ -43,6 +43,7 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
                 responseCallback.invoke(it.getString(Constants.API_RESP_API_VER), it.getString(Constants.API_RESP_HYDRUS_VER))
             },
             {
+                responseCallback.invoke("", "")
                 Toast.makeText(context, context.getString(R.string.msgContactError), Toast.LENGTH_SHORT).show()
             }))
     }
@@ -59,7 +60,8 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
 
     fun search(tags: Array<String>)
     {
-        queue.add(JsonObjectRequest(Request.Method.GET, baseUrl + Constants.API_REQU_SEARCH.format(apiKey), null,
+        val jsonTags = JSONArray(tags)
+        queue.add(JsonObjectRequest(Request.Method.GET, baseUrl + Constants.API_REQU_SEARCH.format(URLEncoder.encode(jsonTags.toString(), "UTF-8"), apiKey), null,
             {
                 batchThumbnailRequest(it.getJSONArray(Constants.API_RESP_FILE_IDS))
             },
@@ -78,10 +80,21 @@ class HydrusApi(private val context: Activity, private var baseUrl: String, priv
     }
 
     fun loadImage(id: String, imageCallback: ImageCallback){
+        var maxWidth = 0
+        var maxHeight = 0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            maxWidth = context.windowManager.currentWindowMetrics.bounds.width()
+            maxHeight = context.windowManager.currentWindowMetrics.bounds.width()
+        } else {
+            val displayMetrics = DisplayMetrics()
+            context.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            maxWidth = displayMetrics.widthPixels
+            maxHeight = displayMetrics.heightPixels
+        }
         queue.add(ImageRequest(baseUrl + Constants.API_REQU_IMAGE.format(id, apiKey),
             {
                 imageCallback(it)
-            }, 0, 0, ImageView.ScaleType.FIT_CENTER, Bitmap.Config.ARGB_8888, null))
+            }, maxWidth, maxHeight, ImageView.ScaleType.FIT_CENTER, Bitmap.Config.ARGB_8888, null))
     }
 
     fun addImage(stream: ByteArrayOutputStream){

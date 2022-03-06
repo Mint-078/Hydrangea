@@ -4,6 +4,7 @@
     <string name="labelUrl">Hydrus URL:\u0020%1$s</string>
     <string name="labelApiVersion">API Version:\u0020%1$s</string>
     <string name="labelHydrusVersion">Hydrus Version:\u0020%1$s</string>
+    <string name="labelHydrangeaVersion">Hydrangea Version:\u0020%1$s</string>
 
     <string name="buttonRegister">Register</string>
     <string name="buttonAddFile">Add File</string>
@@ -19,8 +20,11 @@
     <string name="msgAddFileFailure">Failed to add image from file</string>
     <string name="msgAddFileVeto">Attempt to add image from file vetoed</string>
 
+    <string name="hintSearch">Search tags</string>
+
     <string name="textUrl">URL</string>
 
     <string name="responseApiVersion">version</string>
     <string name="responseHydrusVersion">hydrus_version</string>
+    <string name="hintApiUrl">API URL</string>
 </resources>

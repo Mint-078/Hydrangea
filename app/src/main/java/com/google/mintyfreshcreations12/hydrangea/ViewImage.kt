@@ -1,6 +1,7 @@
 package com.google.mintyfreshcreations12.hydrangea
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 
@@ -16,5 +17,6 @@ class ViewImage : FragmentActivity() {
         findViewById<ViewPager2>(R.id.viewPager).adapter = ImageViewerFragmentAdapter(
             this, ids, hydrus)
         findViewById<ViewPager2>(R.id.viewPager).setCurrentItem(ids.indexOf(this.intent.extras?.getString(Constants.BNDL_IMAGE_ID)), false)
+        findViewById<ViewPager2>(R.id.viewPager).offscreenPageLimit = 2
     }
 }

@@ -31,6 +31,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:hint="@string/hintSearch"
+                app:boxBackgroundColor="@color/hydrangea.kimono.1.1"
+                app:endIconMode="clear_text"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintEnd_toStartOf="@+id/buttonOpenDrawer"
+                app:layout_constraintStart_toStartOf="@+id/toolbar"
+                app:layout_constraintTop_toTopOf="@+id/toolbar"
+                app:startIconDrawable="@drawable/ic_baseline_search_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:textCursorDrawable="@null"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <ImageButton
                 android:id="@+id/buttonOpenDrawer"
                 android:layout_width="wrap_content"
@@ -44,47 +67,22 @@
                 app:srcCompat="@drawable/menu1"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <Button
-                android:id="@+id/buttonSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@android:string/search_go"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Button
-                android:id="@+id/buttonAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddFile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/imageGallery"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="2dp"
                 android:padding="2dp"
-                app:layout_constraintBottom_toTopOf="@+id/buttonSearch"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-            <Button
-                android:id="@+id/buttonAddUrl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonAddUrl"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
-                app:layout_constraintStart_toEndOf="@+id/buttonSearch" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/drawerMenu"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="?attr/colorPrimary"
@@ -94,34 +92,79 @@
                 android:id="@+id/labelURL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/labelUrl" />
+                android:text="@string/labelUrl"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editURL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1" />
+                android:hint="@string/hintApiUrl"
+                app:boxBackgroundColor="@color/hydrangea.kimono.1.1"
+                app:layout_constraintTop_toBottomOf="@id/labelURL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textCursorDrawable="@null"
+                    android:imeOptions="actionDone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/buttonAdd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddFile"
+                android:backgroundTint="@color/hydrangea.kimono.1.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editURL" />
+
+            <Button
+                android:id="@+id/buttonAddUrl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddUrl"
+                android:backgroundTint="@color/hydrangea.kimono.1.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonAdd" />
 
             <TextView
                 android:id="@+id/textApiVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/labelApiVersion" />
+                android:text="@string/labelApiVersion"
+                app:layout_constraintBottom_toTopOf="@id/textHydrusVersion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/textHydrusVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/labelHydrusVersion" />
+                android:text="@string/labelHydrusVersion"
+                app:layout_constraintBottom_toTopOf="@id/textHydrangeaVersion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <Button
-                android:id="@+id/buttonRegister"
+            <TextView
+                android:id="@+id/textHydrangeaVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/buttonRegister" />
+                android:text="@string/labelHydrangeaVersion"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 
 </LinearLayout>
