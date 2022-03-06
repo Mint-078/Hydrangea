@@ -24,5 +24,7 @@ This is a project that I plan to run myself, but I am open to feature requests a
 Links:
 
 Hydrus: https://hydrusnetwork.github.io/hydrus/index.html
+
 (if you feel like donating, not mandatory)
+
 ko-fi: ko-fi.com/mint0936
