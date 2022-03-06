@@ -27,4 +27,4 @@ Hydrus: https://hydrusnetwork.github.io/hydrus/index.html
 
 (if you feel like donating, not mandatory)
 
-ko-fi: ko-fi.com/mint0936
+ko-fi: https://ko-fi.com/mint0936
