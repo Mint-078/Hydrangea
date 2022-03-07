@@ -21,6 +21,10 @@ Planned Features (nonexhaustive):
 
 This is a project that I plan to run myself, but I am open to feature requests and comments.
 
+Screenshots:
+
+<img src="https://user-images.githubusercontent.com/100034598/156960556-7c32b90a-972c-4c77-afb7-23f742957d68.png" width="200">    <img src="https://user-images.githubusercontent.com/100034598/156960553-62426958-1c68-409e-b9e8-aa12863ced95.png" width="200">
+
 Links:
 
 Hydrus: https://hydrusnetwork.github.io/hydrus/index.html
@@ -28,5 +32,3 @@ Hydrus: https://hydrusnetwork.github.io/hydrus/index.html
 (if you feel like donating, not mandatory)
 
 ko-fi: https://ko-fi.com/mint0936
-
-<img src="https://user-images.githubusercontent.com/100034598/156960556-7c32b90a-972c-4c77-afb7-23f742957d68.png" width="200">    <img src="https://user-images.githubusercontent.com/100034598/156960553-62426958-1c68-409e-b9e8-aa12863ced95.png" width="200">
