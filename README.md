@@ -28,7 +28,3 @@ Screenshots:
 Links:
 
 Hydrus: https://hydrusnetwork.github.io/hydrus/index.html
-
-(if you feel like donating, not mandatory)
-
-ko-fi: https://ko-fi.com/mint0936
